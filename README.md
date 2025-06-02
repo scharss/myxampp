@@ -111,7 +111,7 @@ Coloca este código (o similar) en un archivo `.env` dentro del directorio `src/
 *   **MySQL:** Puedes cambiar la versión de MySQL, contraseñas, y nombres de bases de datos directamente en el archivo `docker-compose.yml`.
 
 
-* Para desarrollar con Worpdrees y poder instalar plugins, seguir esto:
+## Para desarrollar con Worpdrees y poder instalar plugins, seguir esto:
 * Definir FS_METHOD en wp-config.php (La más recomendada para Docker)
 * Esta es la forma más limpia y segura para entornos Docker. Le dices a WordPress que intente escribir directamente en el sistema de archivos, asumiendo que los permisos son correctos.
 Edita tu archivo wp-config.php: Este archivo se encuentra en la raíz de tu instalación de WordPress (dentro de tu carpeta src/ que está montada en /var/www/html/).
