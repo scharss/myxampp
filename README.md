@@ -110,6 +110,66 @@ Coloca este código (o similar) en un archivo `.env` dentro del directorio `src/
 *   **Nginx:** La configuración de Nginx se encuentra dentro de la imagen de PHP (o puedes montar una configuración personalizada si es necesario). Para la mayoría de los casos, la configuración por defecto debería funcionar.
 *   **MySQL:** Puedes cambiar la versión de MySQL, contraseñas, y nombres de bases de datos directamente en el archivo `docker-compose.yml`.
 
+
+* Para desarrollar con Worpdrees y poder instalar plugins, seguir esto:
+* Definir FS_METHOD en wp-config.php (La más recomendada para Docker)
+* Esta es la forma más limpia y segura para entornos Docker. Le dices a WordPress que intente escribir directamente en el sistema de archivos, asumiendo que los permisos son correctos.
+Edita tu archivo wp-config.php: Este archivo se encuentra en la raíz de tu instalación de WordPress (dentro de tu carpeta src/ que está montada en /var/www/html/).
+Añade la siguiente línea en alguna parte del archivo, preferiblemente antes de la línea /* That's all, stop editing! Happy publishing. */:
+```
+define('FS_METHOD', 'direct');
+```
+* Guarda el archivo wp-config.php.
+Asegúrate de los permisos de archivo: Después de añadir esta línea, necesitas asegurarte de que el usuario con el que se ejecuta Apache/PHP (generalmente www-data dentro del contenedor) tenga permisos de escritura sobre las carpetas wp-content/plugins/ y wp-content/upgrade/ (y a veces wp-content/uploads/ para otras operaciones).
+Dentro del contenedor (método preferido para ajustar permisos si FS_METHOD es direct):
+Entra al contenedor web:
+
+```
+docker-compose exec web bash
+```
+
+* Esto te dará una línea de comandos dentro del contenedor web. Verás un prompt diferente, algo como root@mi_app_web_avanzado:/var/www/html# o www-data@mi_app_web_avanzado:/var/www/html$.
+Navega al directorio raíz de WordPress dentro del contenedor (si no estás ya ahí):
+El prompt ya debería indicarte que estás en /var/www/html, que es donde está montada tu carpeta src/. Si no, ejecuta:
+```
+cd /var/www/html
+```
+* Cambia el propietario de las carpetas relevantes a www-data:
+Ejecuta los siguientes comandos uno por uno:
+
+```
+chown -R www-data:www-data wp-content/plugins
+chown -R www-data:www-data wp-content/upgrade
+chown -R www-data:www-data wp-content/themes
+chown -R www-data:www-data wp-content/uploads 
+```
+* Si alguna de estas carpetas no existe aún (por ejemplo, upgrade o uploads a veces se crean la primera vez que se necesitan), el comando simplemente no hará nada para esa carpeta específica, lo cual está bien. La más importante para instalar plugins es wp-content/plugins.
+
+  
+* chown cambia el propietario.
+-R significa recursivo (aplica el cambio a la carpeta y todo su contenido).
+www-data:www-data establece el usuario www-data y el grupo www-data.
+Ajusta los permisos de las carpetas para que el propietario (www-data) pueda escribir:
+Ejecuta los siguientes comandos uno por uno:
+
+```
+chmod -R 755 wp-content/plugins
+chmod -R 755 wp-content/upgrade
+chmod -R 755 wp-content/themes
+chmod -R 755 wp-content/uploads
+```
+* chmod cambia los permisos.
+-R es recursivo.
+755 significa:
+Propietario (www-data): Leer, Escribir, Ejecutar (rwx)
+Grupo (www-data): Leer, Ejecutar (r-x)
+Otros: Leer, Ejecutar (r-x)
+Para archivos dentro de estas carpetas, WordPress a veces necesita 644. Si los comandos anteriores para los directorios no son suficientes, podrías necesitar algo más granular, pero 755 para los directorios suele ser el primer paso.
+Sal del contenedor:
+Escribe exit y presiona Enter.
+```
+exit
+```
 ¡Feliz desarrollo!
 
 
