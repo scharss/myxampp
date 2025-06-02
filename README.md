@@ -170,6 +170,101 @@ Escribe exit y presiona Enter.
 ```
 exit
 ```
+
+
+# Gestión de Paquetes del Sistema en Contenedores Docker
+
+Cómo instalar y desinstalar paquetes del sistema operativo dentro de un contenedor Docker que utiliza una distribución basada en Debian o Ubuntu (por ejemplo, imágenes como `php:apache`, `node`, `python`, `ubuntu`, `debian`, etc.).
+
+Existen dos enfoques principales para la gestión de paquetes:
+
+1.  **Modificaciones Temporales:** Se realizan dentro de un contenedor que ya está en ejecución. Son útiles para pruebas rápidas o necesidades puntuales, pero los cambios se perderán si el contenedor se detiene y se recrea a partir de su imagen original.
+2.  **Modificaciones Permanentes:** Se realizan editando el `Dockerfile` que define la imagen del contenedor. Este es el método recomendado para asegurar que los cambios persistan a través de los reinicios y recreaciones del contenedor, y para mantener un entorno reproducible.
+
+---
+
+## 1. Modificaciones Temporales (Dentro de un Contenedor en Ejecución)
+
+Estos cambios solo afectan a la instancia actual del contenedor.
+
+### A. Acceder a la Shell del Contenedor
+
+Para realizar cambios, primero necesitas obtener una shell interactiva dentro del contenedor deseado.
+
+*   **Si usas Docker Compose** (y tu servicio se llama, por ejemplo, `mi_servicio`):
+    ```bash
+    docker-compose exec mi_servicio bash
+    ```
+
+*   **Si usas `docker run`** (y conoces el nombre o ID del contenedor):
+    ```bash
+    docker exec -it <nombre_o_id_del_contenedor> bash
+    ```
+
+Una vez ejecutado el comando, tu prompt cambiará, indicando que estás dentro de la shell del contenedor (ej. `root@contenedor_id:/#`).
+
+### B. Instalar Paquetes Temporalmente
+
+Desde la shell del contenedor:
+
+1.  **Actualiza la lista de paquetes** del repositorio (es una buena práctica hacerlo antes de instalar):
+    ```bash
+    apt-get update
+    ```
+    o, de forma más concisa:
+    ```bash
+    apt update
+    ```
+
+2.  **Instala el paquete deseado:**
+    Reemplaza `nombre-del-paquete` con el nombre real del paquete que quieres instalar (ej. `nano`, `git`, `curl`, `vim`).
+    ```bash
+    apt-get install -y nombre-del-paquete
+    ```
+    o:
+    ```bash
+    apt install -y nombre-del-paquete
+    ```
+    El flag `-y` responde automáticamente "sí" a cualquier pregunta de confirmación durante la instalación.
+
+### C. Desinstalar Paquetes Temporalmente
+
+Desde la shell del contenedor:
+
+1.  **Desinstala el paquete:**
+    ```bash
+    apt-get remove nombre-del-paquete
+    ```
+    o:
+    ```bash
+    apt remove nombre-del-paquete
+    ```
+
+2.  **Para desinstalar el paquete Y eliminar sus archivos de configuración:**
+    ```bash
+    apt-get purge nombre-del-paquete
+    ```
+    o:
+    ```bash
+    apt purge nombre-del-paquete
+    ```
+
+3.  **Opcional: Limpiar dependencias que ya no son necesarias:**
+    Después de desinstalar paquetes, algunas dependencias podrían quedar huérfanas.
+    ```bash
+    apt-get autoremove
+    ```
+    o:
+    ```bash
+    apt autoremove
+    ```
+
+### D. Salir del Contenedor
+
+Cuando hayas terminado de instalar o desinstalar paquetes temporalmente, sal de la shell del contenedor:
+
+```bash
+exit
 ¡Feliz desarrollo!
 
 
