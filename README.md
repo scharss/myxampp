@@ -265,6 +265,7 @@ Cuando hayas terminado de instalar o desinstalar paquetes temporalmente, sal de 
 
 ```bash
 exit
+```
 ¡Feliz desarrollo!
 
 
