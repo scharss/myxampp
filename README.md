@@ -1,156 +1,154 @@
-# Proyecto PHP con Docker y MySQL
+# PHP Project with Docker and MySQL
 
-Este proyecto proporciona una configuración de Docker lista para usar para desarrollar y ejecutar aplicaciones PHP con una base de datos MySQL. Incluye un servidor web Nginx, PHP-FPM y un servicio MySQL, junto con PhpMyAdmin para una fácil gestión de la base de datos.
+This project provides a ready-to-use Docker configuration for developing and running PHP applications with a MySQL database. It includes an Nginx web server, PHP-FPM, and a MySQL service, along with PhpMyAdmin for easy database management.
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-miproyecto/
-├── docker-compose.yml  # Define los servicios de Docker (PHP, Nginx, MySQL, PhpMyAdmin)
+myproject/
+├── docker-compose.yml # Define Docker services (PHP, Nginx, MySQL, PhpMyAdmin)
 ├── php/
-│   ├── Dockerfile      # Para personalizar PHP (instalar extensiones, Composer, etc.)
-│   └── php.ini         # Configuraciones PHP personalizadas (upload_max_filesize, etc.)
-└── src/                # Aquí va tu código PHP (tu aplicación)
-    └── index.php       # Ejemplo inicial o punto de entrada de tu aplicación
-    └── composer.json   # Si usas Composer para tus dependencias PHP
+│ ├── Dockerfile # To customize PHP (install extensions, Composer, etc.)
+│ └── php.ini # Custom PHP settings (upload_max_filesize, etc.)
+└── src/ # This is where your PHP code goes (your application)
+└── index.php # Initial example or entry point for your application
+└── composer.json # If you use Composer for your PHP dependencies
 ```
 
-## Requisitos Previos
+## Prerequisites
 
-*   Docker Desktop instalado en tu sistema.
+* Docker Desktop installed on your system.
 
-## Cómo Empezar
+## How to Get Started
 
-1.  **Clona o descarga este proyecto.**
-2.  **Coloca tu código PHP existente en el directorio `src/`.** Si estás comenzando un nuevo proyecto, puedes empezar a crear tus archivos PHP dentro de esta carpeta.
-3.  **Configura las variables de entorno (opcional):**
-    *   Puedes modificar el archivo `docker-compose.yml` para cambiar las contraseñas de MySQL, los puertos expuestos u otras configuraciones según tus necesidades. Busca las secciones `environment` en los servicios `db` y `phpmyadmin`.
+1. **Clone or download this project.**
+2. **Place your existing PHP code in the `src/` directory.** If you are starting a new project, you can begin creating your PHP files within this folder.
+3. **Set environment variables (optional):**
+* You can modify the `docker-compose.yml` file to change MySQL passwords, exposed ports, or other settings according to your needs. Look for the `environment` sections in the `db` and `phpmyadmin` services.
 
-## Uso
+## Usage
 
-### 1. Construir e Iniciar los Contenedores
+### 1. Build and Start the Containers
 
-Abre una terminal en la raíz del proyecto (donde se encuentra el archivo `docker-compose.yml`) y ejecuta el siguiente comando:
+Open a terminal at the project root (where the `docker-compose.yml` file is located) and run the following command:
 
 ```bash
 docker-compose up -d --build
 ```
 
-*   `up`: Crea e inicia los contenedores.
-*   `-d`: Ejecuta los contenedores en segundo plano (modo detached).
-*   `--build`: Construye las imágenes antes de iniciar los contenedores (útil si has modificado el `Dockerfile` de PHP).
+* `up`: Create and start the containers.
+* `-d`: Run containers in the background (detached mode).
+* `--build`: Build images before starting containers (useful if you've modified the PHP Dockerfile).
 
-### 2. Acceder a tu Aplicación
+### 2. Access Your Application
 
-Una vez que los contenedores estén en funcionamiento:
+Once the containers are running:
 
-*   **Tu aplicación PHP:** Abre tu navegador y ve a `http://localhost:8080` (o el puerto que hayas configurado para el servicio `web` en `docker-compose.yml`).
-*   **PhpMyAdmin:** Abre tu navegador y ve a `http://localhost:8081` (o el puerto que hayas configurado para `phpmyadmin`). Utiliza las credenciales de MySQL definidas en `docker-compose.yml` para iniciar sesión. Por defecto (si no has cambiado nada), el servidor es `db`, el usuario es `root` y la contraseña es la que hayas puesto en `MYSQL_ROOT_PASSWORD`.
+* **Your PHP application:** Open your browser and go to `http://localhost:8080` (or whatever port you configured for the web service in `docker-compose.yml`).
+* **PhpMyAdmin:** Open your browser and go to `http://localhost:8081` (or whatever port you configured for `phpmyadmin`). Use the MySQL credentials defined in `docker-compose.yml` to log in. By default (if you haven't changed anything), the server is `db`, the user is `root`, and the password is the one you set in `MYSQL_ROOT_PASSWORD`.
 
-### 3. Conectar PHP a MySQL
+### 3. Connect PHP to MySQL
 
-Dentro de tu código PHP en el directorio `src/`, puedes conectarte a la base de datos MySQL utilizando los siguientes detalles:
+In your PHP code in the `src/` directory, you can connect to the MySQL database using the following details:
 
-*   **Host:** `db` (este es el nombre del servicio MySQL definido en `docker-compose.yml`)
-*   **Nombre de la base de datos:** La que hayas definido en `MYSQL_DATABASE` en `docker-compose.yml` (por ejemplo, `mydatabase`).
-*   **Usuario:** El que hayas definido en `MYSQL_USER` en `docker-compose.yml` (por ejemplo, `myuser`).
-*   **Contraseña:** La que hayas definido en `MYSQL_PASSWORD` en `docker-compose.yml`.
+* **Host:** `db` (this is the name of the MySQL service defined in `docker-compose.yml`)
+* **Database name:** The one you defined in `MYSQL_DATABASE` in `docker-compose.yml` (for example, `mydatabase`).
+* **User:** The one you defined in `MYSQL_USER` in `docker-compose.yml` (for example, `myuser`).
+* **Password:** The one you defined in `MYSQL_PASSWORD` in `docker-compose.yml`.
 
-**Ejemplo de conexión a base de datos con .env**
+**Example of connecting to a database with .env**
 
 ```
 DB_SERVER=db
-DB_USERNAME=mi_usuario_db
+DB_USERNAME=my_db_username
 DB_PASSWORD=root
-DB_NAME=mi_base_de_datos
+DB_NAME=my_database
 ```
 
-Coloca este código (o similar) en un archivo `.env` dentro del directorio `src/miporyecto` para probar la conexión a Mysql.
+Place this code (or similar) in a `.env` file inside the `src/myproject` directory to test the connection to MySQL.
 
-## Comandos Útiles de Docker
+## Useful Docker Commands
 
-*   **Ver los logs de los contenedores:**
-    ```bash
-    docker-compose logs -f web  # Logs del contenedor web (Nginx/PHP)
-    docker-compose logs -f db   # Logs del contenedor MySQL
-    ```
-    (Reemplaza `web` o `db` con el nombre del servicio que quieras inspeccionar).
+* **View container logs:**
+```bash
+docker-compose logs -f web # Web container logs (Nginx/PHP)
+docker-compose logs -f db # MySQL container logs
+```
+(Replace `web` or `db` with the name of the service you want to inspect.)
 
-*   **Ejecutar comandos dentro de un contenedor:**
-    Esto es útil para usar Composer, ejecutar migraciones de bases de datos, o acceder a la consola de un framework PHP.
-    ```bash
-    docker-compose exec web bash
-    ```
-    Esto te dará una sesión de shell dentro del contenedor `web`. Una vez dentro, puedes ejecutar comandos como:
-    ```bash
-    # composer install
-    # composer update
-    # exit (para salir del contenedor)
-    ```
+* **Run commands inside a container:**
+This is useful for using Composer, running database migrations, or accessing the console of a PHP framework.
+```bash
+docker-compose exec web bash
+```
+This will give you a shell session inside the `web` container. Once inside, you can run commands like:
+```bash
+# composer install
+# composer update
+# exit (to exit the container)
+```
 
-*   **Detener los contenedores:**
-    ```bash
-    docker-compose down
-    ```
+* **Stop containers:**
+```bash
+docker-compose down
+```
 
-*   **Detener y eliminar los volúmenes (borrará los datos de MySQL):**
-    **¡ADVERTENCIA!** Este comando eliminará permanentemente los datos de tu base de datos MySQL si están almacenados en un volumen gestionado por Docker.
-    ```bash
-    docker-compose down -v
-    ```
+* **Stop and delete volumes (will delete MySQL data):**
+**WARNING!** This command will permanently delete your MySQL database data if it is stored on a Docker-managed volume. ```bash
+docker-compose down -v
+```
 
-*   **Reconstruir e iniciar (si has hecho cambios en Dockerfile o docker-compose.yml):**
-    ```bash
-    docker-compose up -d --build
-    ```
+* **Rebuild and start (if you've made changes to the Dockerfile or docker-compose.yml):**
+```bash
+docker-compose up -d --build
+```
 
-## Personalización
+## Customization
 
-*   **PHP:** Modifica `php/Dockerfile` para instalar extensiones PHP adicionales (ej. `gd`, `zip`, `intl`) o herramientas como Composer. Ajusta `php/php.ini` para configuraciones específicas de PHP (ej. `upload_max_filesize`, `memory_limit`). Después de realizar cambios, recuerda reconstruir las imágenes con `docker-compose up -d --build`.
-*   **Nginx:** La configuración de Nginx se encuentra dentro de la imagen de PHP (o puedes montar una configuración personalizada si es necesario). Para la mayoría de los casos, la configuración por defecto debería funcionar.
-*   **MySQL:** Puedes cambiar la versión de MySQL, contraseñas, y nombres de bases de datos directamente en el archivo `docker-compose.yml`.
+* **PHP:** Modify `php/Dockerfile` to install additional PHP extensions (e.g., `gd`, `zip`, `intl`) or tools like Composer. Adjust `php/php.ini` for PHP-specific configurations (e.g., `upload_max_filesize`, `memory_limit`). After making changes, remember to rebuild the images with `docker-compose up -d --build`.
+* **Nginx:** The Nginx configuration is located inside the PHP image (or you can build a custom configuration if needed). For most cases, the default configuration should work.
 
+* **Nginx:** The Nginx configuration is located inside the PHP image (or you can build a custom configuration if needed). For most cases, the default configuration should work. * **MySQL:** You can change the MySQL version, passwords, and database names directly in the `docker-compose.yml` file.
 
-## Para desarrollar con Worpdrees y poder instalar plugins, seguir esto:
-* Definir FS_METHOD en wp-config.php (La más recomendada para Docker)
-* Esta es la forma más limpia y segura para entornos Docker. Le dices a WordPress que intente escribir directamente en el sistema de archivos, asumiendo que los permisos son correctos.
-Edita tu archivo wp-config.php: Este archivo se encuentra en la raíz de tu instalación de WordPress (dentro de tu carpeta src/ que está montada en /var/www/html/).
-Añade la siguiente línea en alguna parte del archivo, preferiblemente antes de la línea /* That's all, stop editing! Happy publishing. */:
+## To develop with WordPress and be able to install plugins, follow this:
+* Define FS_METHOD in wp-config.php (Most recommended for Docker)
+* This is the cleanest and safest way for Docker environments. It tells WordPress to attempt to write directly to the filesystem, assuming the permissions are correct.
+Edit your wp-config.php file: This file is located in the root of your WordPress installation (inside your src/ folder, which is mounted at /var/www/html/).
+Add the following line somewhere in the file, preferably before the /* That's all, stop editing! Happy publishing. */ line:
 ```
 define('FS_METHOD', 'direct');
 ```
-* Guarda el archivo wp-config.php.
-Asegúrate de los permisos de archivo: Después de añadir esta línea, necesitas asegurarte de que el usuario con el que se ejecuta Apache/PHP (generalmente www-data dentro del contenedor) tenga permisos de escritura sobre las carpetas wp-content/plugins/ y wp-content/upgrade/ (y a veces wp-content/uploads/ para otras operaciones).
-Dentro del contenedor (método preferido para ajustar permisos si FS_METHOD es direct):
-Entra al contenedor web:
+* Save the wp-config.php file.
+Ensure file permissions: After adding this line, you need to ensure that the user running Apache/PHP (usually www-data inside the container) has write permissions to the wp-content/plugins/ and wp-content/upgrade/ folders (and sometimes wp-content/uploads/ for other operations).
+Inside the container (the preferred method for setting permissions if FS_METHOD is direct):
+Enter the web container:
 
 ```
 docker-compose exec web bash
 ```
 
-* Esto te dará una línea de comandos dentro del contenedor web. Verás un prompt diferente, algo como root@mi_app_web_avanzado:/var/www/html# o www-data@mi_app_web_avanzado:/var/www/html$.
-Navega al directorio raíz de WordPress dentro del contenedor (si no estás ya ahí):
-El prompt ya debería indicarte que estás en /var/www/html, que es donde está montada tu carpeta src/. Si no, ejecuta:
+* This will open a command line inside the web container. You'll see a different prompt, something like root@my_advanced_web_app:/var/www/html# or www-data@my_advanced_web_app:/var/www/html$.
+Navigate to the WordPress root directory inside the container (if you're not already there):
+The prompt should already tell you that you're in /var/www/html, which is where your src/ folder is mounted. If not, run:
 ```
 cd /var/www/html
 ```
-* Cambia el propietario de las carpetas relevantes a www-data:
-Ejecuta los siguientes comandos uno por uno:
+* Change the owner of the relevant folders to www-data:
+Run the following commands one by one:
 
 ```
 chown -R www-data:www-data wp-content/plugins
 chown -R www-data:www-data wp-content/upgrade
 chown -R www-data:www-data wp-content/themes
-chown -R www-data:www-data wp-content/uploads 
+chown -R www-data:www-data wp-content/uploads
 ```
-* Si alguna de estas carpetas no existe aún (por ejemplo, upgrade o uploads a veces se crean la primera vez que se necesitan), el comando simplemente no hará nada para esa carpeta específica, lo cual está bien. La más importante para instalar plugins es wp-content/plugins.
+* If any of these folders don't already exist (for example, upgrade or uploads are sometimes created the first time they're needed), the command will simply do nothing for that specific folder, which is fine. The most important one for installing plugins is wp-content/plugins.
 
-  
-* chown cambia el propietario.
--R significa recursivo (aplica el cambio a la carpeta y todo su contenido).
-www-data:www-data establece el usuario www-data y el grupo www-data.
-Ajusta los permisos de las carpetas para que el propietario (www-data) pueda escribir:
-Ejecuta los siguientes comandos uno por uno:
+* chown changes the owner.
+-R means recursive (applies the change to the folder and all its contents).
+www-data:www-data sets the user www-data and the group www-data.
+Adjust the folder permissions so that the owner (www-data) can write:
+Run the following commands one by one:
 
 ```
 chmod -R 755 wp-content/plugins
@@ -158,127 +156,110 @@ chmod -R 755 wp-content/upgrade
 chmod -R 755 wp-content/themes
 chmod -R 755 wp-content/uploads
 ```
-* chmod cambia los permisos.
--R es recursivo.
-755 significa:
-Propietario (www-data): Leer, Escribir, Ejecutar (rwx)
-Grupo (www-data): Leer, Ejecutar (r-x)
-Otros: Leer, Ejecutar (r-x)
-Para archivos dentro de estas carpetas, WordPress a veces necesita 644. Si los comandos anteriores para los directorios no son suficientes, podrías necesitar algo más granular, pero 755 para los directorios suele ser el primer paso.
-Sal del contenedor:
-Escribe exit y presiona Enter.
+* chmod changes the permissions.
+-R is recursive.
+755 means:
+Owner (www-data): Read, Write, Execute (rwx)
+Group (www-data): Read, Execute (r-x)
+Other: Read, Execute (r-x)
+For files within these folders, WordPress sometimes requires 644. If the above commands for directories aren't enough, you might need something more granular, but 755 for directories is usually the first step.
+Exit the container:
+Type exit and press Enter.
 ```
 exit
 ```
 
+# Managing System Packages in Docker Containers
 
-# Gestión de Paquetes del Sistema en Contenedores Docker
+How to install and uninstall operating system packages within a Docker container using a Debian or Ubuntu-based distribution (e.g., images like `php:apache`, `node`, `python`, `ubuntu`, `debian`, etc.).
 
-Cómo instalar y desinstalar paquetes del sistema operativo dentro de un contenedor Docker que utiliza una distribución basada en Debian o Ubuntu (por ejemplo, imágenes como `php:apache`, `node`, `python`, `ubuntu`, `debian`, etc.).
+There are two main approaches to package management:
 
-Existen dos enfoques principales para la gestión de paquetes:
-
-1.  **Modificaciones Temporales:** Se realizan dentro de un contenedor que ya está en ejecución. Son útiles para pruebas rápidas o necesidades puntuales, pero los cambios se perderán si el contenedor se detiene y se recrea a partir de su imagen original.
-2.  **Modificaciones Permanentes:** Se realizan editando el `Dockerfile` que define la imagen del contenedor. Este es el método recomendado para asegurar que los cambios persistan a través de los reinicios y recreaciones del contenedor, y para mantener un entorno reproducible.
+1. Temporary Modifications: These are made within an already running container. They are useful for quick testing or one-off needs, but changes will be lost if the container is stopped and rebuilt from its original image.
+2. Permanent Modifications: These are made by editing the Dockerfile that defines the container image. This is the recommended method to ensure changes persist across container restarts and rebuilds, and to maintain a reproducible environment.
 
 ---
 
-## 1. Modificaciones Temporales (Dentro de un Contenedor en Ejecución)
+## 1. Temporary Modifications (Inside a Running Container)
 
-Estos cambios solo afectan a la instancia actual del contenedor.
+These changes only affect the current container instance.
 
-### A. Acceder a la Shell del Contenedor
+### A. Accessing the Container Shell
 
-Para realizar cambios, primero necesitas obtener una shell interactiva dentro del contenedor deseado.
+To make changes, you first need to obtain an interactive shell inside the desired container.
 
-*   **Si usas Docker Compose** (y tu servicio se llama, por ejemplo, `mi_servicio`):
-    ```bash
-    docker-compose exec mi_servicio bash
-    ```
+* **If you are using Docker Compose** (and your service is called, for example, `my_service`):
+```bash
+docker-compose exec my_service bash
+```
 
-*   **Si usas `docker run`** (y conoces el nombre o ID del contenedor):
-    ```bash
-    docker exec -it <nombre_o_id_del_contenedor> bash
-    ```
+* **If you are using `docker run`** (and you know the container name or ID):
+```bash
+docker exec -it <container_name_or_id> bash
+```
 
-Una vez ejecutado el comando, tu prompt cambiará, indicando que estás dentro de la shell del contenedor (ej. `root@contenedor_id:/#`).
+Once the command is executed, your prompt will change, indicating that you are inside the container shell (e.g., `root@container_id:/#`).
 
-### B. Instalar Paquetes Temporalmente
+### B. Temporarily Installing Packages
 
-Desde la shell del contenedor:
+From the container shell:
 
-1.  **Actualiza la lista de paquetes** del repositorio (es una buena práctica hacerlo antes de instalar):
-    ```bash
-    apt-get update
-    ```
-    o, de forma más concisa:
-    ```bash
-    apt update
-    ```
+1. **Update the package list** of the repository (it's good practice to do this before installing):
+```bash
+apt-get update
+```
+or, more concisely:
+```bash
+apt update
+```
 
-2.  **Instala el paquete deseado:**
-    Reemplaza `nombre-del-paquete` con el nombre real del paquete que quieres instalar (ej. `nano`, `git`, `curl`, `vim`).
-    ```bash
-    apt-get install -y nombre-del-paquete
-    ```
-    o:
-    ```bash
-    apt install -y nombre-del-paquete
-    ```
-    El flag `-y` responde automáticamente "sí" a cualquier pregunta de confirmación durante la instalación.
+2. **Install the desired package:**
+Replace `package-name` with the actual name of the package you want to install (e.g., `nano`, `git`, `curl`, `vim`).
+```bash
+apt-get install -y package-name
+```
+or:
+```bash
+apt install -y package-name
+```
+The `-y` flag automatically answers "yes" to any confirmation prompts during the installation.
 
-### C. Desinstalar Paquetes Temporalmente
+### C. Temporarily Uninstall Packages
 
-Desde la shell del contenedor:
+From the container shell:
 
-1.  **Desinstala el paquete:**
-    ```bash
-    apt-get remove nombre-del-paquete
-    ```
-    o:
-    ```bash
-    apt remove nombre-del-paquete
-    ```
+1. **Uninstall the package:**
+```bash
+apt-get remove package-name
+```
+or:
+```bash
+apt remove package-name
+```
 
-2.  **Para desinstalar el paquete Y eliminar sus archivos de configuración:**
-    ```bash
-    apt-get purge nombre-del-paquete
-    ```
-    o:
-    ```bash
-    apt purge nombre-del-paquete
-    ```
+2. **To uninstall the package AND remove its configuration files:**
+```bash
+apt-get purge package-name
+```
+or:
+```bash
+apt purge package-name
+```
 
-3.  **Opcional: Limpiar dependencias que ya no son necesarias:**
-    Después de desinstalar paquetes, algunas dependencias podrían quedar huérfanas.
-    ```bash
-    apt-get autoremove
-    ```
-    o:
-    ```bash
-    apt autoremove
-    ```
+3. **Optional: Clean up dependencies that are no longer needed:**
+After uninstalling packages, some dependencies might be left behind. ```bash
+apt-get autoremove
+```
+or:
+```bash
+apt autoremove
+```
 
-### D. Salir del Contenedor
+### D. Exiting the Container
 
-Cuando hayas terminado de instalar o desinstalar paquetes temporalmente, sal de la shell del contenedor:
+When you're done installing or temporarily uninstalling packages, exit the container shell:
 
 ```bash
 exit
 ```
-¡Feliz desarrollo!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Happy development!
