@@ -1,4 +1,4 @@
-# PHP Project with Docker and MySQL
+# Docker development environment for PHP and MySQL
 
 This project provides a ready-to-use Docker configuration for developing and running PHP applications with a MySQL database. It includes an Nginx web server, PHP-FPM, and a MySQL service, along with PhpMyAdmin for easy database management.
 
