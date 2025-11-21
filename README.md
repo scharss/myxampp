@@ -15,9 +15,89 @@ myproject/
 └── composer.json # If you use Composer for your PHP dependencies
 ```
 
-## Prerequisites
+### Prerequisites
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- At least 4GB available RAM
+- Approximately 2GB disk space
 
-* Docker Desktop installed on your system.
+### 🐳 Docker Installation
+
+The application uses Docker to work consistently across all platforms. Follow these instructions to install it on your system.
+
+### 🪟 Windows Installation
+
+1. **Install Docker Desktop**:
+   - Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+   - Install WSL 2 if necessary (Windows 10/11):
+     ```powershell
+     wsl --install
+     ```
+   - Run the Docker Desktop installer and make sure the "Use WSL 2" option is selected
+   - Restart your computer
+
+### 🍎 macOS Installation
+
+1. **Install Docker Desktop**:
+   - Download [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
+   - Run the installer (make sure to select the correct version for your Mac: Intel or Apple Silicon)
+   - Start Docker Desktop from Applications folder
+   - Wait for Docker to finish starting up (you'll see the whale icon in the menu bar)
+
+### 🐧 Linux Installation
+
+Install Docker and Docker Compose:
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install docker.io docker-compose
+sudo systemctl enable --now docker
+```
+
+**Fedora/RHEL/CentOS:**
+```bash
+sudo dnf install docker docker-compose
+sudo systemctl enable --now docker
+```
+
+**Arch Linux:**
+```bash
+sudo pacman -S docker docker-compose
+sudo systemctl enable --now docker
+```
+
+**Add Your User to the Docker Group (to use Docker without sudo):**
+```bash
+sudo usermod -aG docker $USER
+```
+Log out and back in for the changes to take effect.
+
+### 📋 Installation Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/scharss/xampo
+   cd xampo
+   ```
+
+2. **Build and start containers:**
+   ```bash
+   docker-compose up -d --build
+   ```
+
+3. **Verify everything works:**
+   ```bash
+   # Check active containers
+   docker-compose ps
+   
+   # Verify installed PHP extensions
+   docker-compose exec php php -m
+   ```
+
+4. **Access the application:**
+   - **Your application:** http://localhost:8080/
+   - **PhpMyAdmin:** http://localhost:8081/
 
 ## How to Get Started
 
