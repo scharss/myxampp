@@ -77,8 +77,8 @@ Log out and back in for the changes to take effect.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/scharss/xampo
-   cd xampo
+   git clone https://github.com/scharss/myxampp
+   cd myxampp
    ```
 
 2. **Build and start containers:**
